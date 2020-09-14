@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Dialog</title>
+  <title>Tooltip</title>
   <style>
     .container {
       max-width: 800px;
@@ -15,180 +15,197 @@
       padding: 16px;
     }
 
-    .button {
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #303030;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      outline: none;
-      cursor: pointer;
+    .carousel {
       position: relative;
+      height: 200px;
     }
 
-    .button:hover {
-      border-color: lightskyblue;
-      color: lightskyblue
+    .carousel .panels>a {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      opacity: 0;
+      z-index: 0;
+      transition: all .3s;
     }
 
-    .button.primary {
+    .carousel .panels>a.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .carousel .panels>a:nth-child(even) {
       background-color: lightskyblue;
-      color: #fff;
-      border: 0;
     }
 
-    .dialog {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: rgba(0, 0, 0, 0.3);
-      display: none;
-      opacity: 0;
-      transition: all .3s;
+    .carousel .panels>a:nth-child(odd) {
+      background-color: lightpink;
     }
 
-    .dialog.show {
-      display: block;
-    }
-
-    .dialog.appear {
-      opacity: 1;
-    }
-
-    .dialog .main {
-      width: 60%;
-      background-color: #fff;
-      margin: 30px auto;
-      padding: 16px;
-      border-radius: 6px;
-      box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
-      transform: translateY(-100%);
-      opacity: 0;
-      transition: all .3s;
-    }
-
-    .dialog.appear .main {
-      transform: translateY(40px);
-      opacity: 1;
-    }
-
-
-    .dialog .header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 18px;
-    }
-
-    .dialog .header .close {
-      margin-left: auto;
+    .carousel .arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: center;
-      outline: none;
+      width: 32px;
+      height: 32px;
       border: none;
-      padding: 4px;
+      border-radius: 50%;
+      background: rgba(31, 45, 61, .11);
+      opacity: 0;
+      transition: all .3s;
+      outline: none;
       cursor: pointer;
     }
 
-    .dialog .header .close::before,
-    .dialog .header .close::after {
-      content: '';
-      position: absolute;
-      display: block;
-      width: 10px;
-      height: 1px;
-      background: #333;
-      transform: rotate(45deg);
+    .carousel .arrow-pre {
+      left: 10px;
+      transform: translateX(-10px) translateY(-50%);
     }
 
-    .dialog .header .close::after {
+    .carousel:hover .arrow-pre {
+      transform: translateX(0) translateY(-50%);
+      opacity: 1;
+    }
+
+    .carousel .arrow-next {
+      right: 10px;
+      transform: translateX(10px) translateY(-50%);
+    }
+
+    .carousel:hover .arrow-next {
+      transform: translateX(0) translateY(-50%);
+      opacity: 1;
+    }
+
+
+    .carousel .arrow::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-left: 1px solid #fff;
+      border-top: 1px solid #fff;
       transform: rotate(-45deg);
     }
 
-    .dialog .footer {
-      display: flex;
-      justify-content: flex-end;
+    .carousel .arrow.arrow-next::before {
+      transform: rotate(135deg);
     }
 
-    .dialog .footer .button {
-      margin-left: 10px;
+    .carousel .indicators {
+      position: absolute;
+      z-index: 100;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .carousel .indicators>li {
+      display: inline-block;
+      padding: 5px 0;
+      cursor: pointer;
+    }
+
+    .carousel .indicators>li::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 2px;
+      border-radius: 2px;
+      background: #c0c4cc;
+      transition: all .3s;
+    }
+
+    .carousel .indicators>li.active::before {
+      background: #fff;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h2>Dialog</h2>
-    <button class="button open-dialog">打开弹窗</button>
-    <div class="dialog">
-      <div class="main">
-        <div class="header">提示 <button class="close"></button></div>
-        <div class="content">
-          <p>这是一段消息</p>
-        </div>
-        <div class="footer">
-          <button class="button btn-cancel">取消</button>
-          <button class="button primary btn-ok">确定</button>
-        </div>
+    <h2>Carousel</h2>
+    <div class="carousel">
+      <div class="panels">
+        <a class="active" href="#0">0</a>
+        <a href="#1">1</a>
+        <a href="#2">2</a>
+        <a href="#3">3</a>
       </div>
+      <div class="arrows">
+        <button class="arrow arrow-pre"></button>
+        <button class="arrow arrow-next"></button>
+      </div>
+      <ul class="indicators">
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
     </div>
+
   </div>
 
+
   <script>
-    class Dialog {
-      constructor($root, options = {}) {
-        this.$root = $root
-        this.options = options
-        this.onCancel = options.onCancel || function () {}
-        this.onOk = options.onOk || function () {}
+    const $ = s => document.querySelector(s)
+    const $$ = s => document.querySelectorAll(s)
 
-        this.bind()
-      }
+    const $pre = $('.carousel .arrow-pre')
+    const $next = $('.carousel .arrow-next')
+    const $$indicators = $$('.carousel .indicators > li')
+    const $$panels = $$('.carousel .panels > a')
 
-      bind() {
-        let self = this
-        this.$root.querySelector('.close').onclick = function () {
-          self.hide()
-          self.onCancel()
-        }
-        this.$root.querySelector('.btn-cancel').onclick = function () {
-          self.hide()
-          self.onCancel()
-        }
-        this.$root.querySelector('.btn-ok').onclick = function () {
-          self.hide()
-          self.onOk()
-        }
-      }
+    const getIndex = () => [...$$indicators].indexOf($('.carousel .indicators .active'))
+    const getPreIndex = () => (getIndex() - 1 + $$indicators.length) % $$indicators.length
+    const getNextIndex = () => (getIndex() + 1) % $$indicators.length
 
-      hide() {
-        this.$root.classList.remove('appear')
-        setTimeout(() => this.$root.classList.remove('show'), 400)
-
-      }
-
-      show() {
-        this.$root.classList.add('show')
-        setTimeout(() => this.$root.classList.add('appear'))
-      }
+    const setPage = index => {
+      $$panels.forEach($panel => $panel.classList.remove('active'))
+      $$panels[index].classList.add('active')
     }
 
-    let dialog = new Dialog(document.querySelector('.dialog'), {
-      onOk() {
-        console.log('用户点了ok')
-      },
-      onCancel() {
-        console.log('用户点了取消')
-      }
+    const setIndicator = index => {
+      $$indicators.forEach($indicator => $indicator.classList.remove('active'))
+      $$indicators[index].classList.add('active')
+    }
+
+    $pre.onclick = function () {
+      let index = getPreIndex()
+      setPage(index)
+      setIndicator(index)
+    }
+
+    $next.onclick = function () {
+      let index = getNextIndex()
+      setPage(index)
+      setIndicator(index)
+    }
+
+    $$indicators.forEach($indicator => $indicator.onclick = function (e) {
+      let index = [...$$indicators].indexOf(e.target)
+      setIndicator(index)
+      setPage(index)
     })
 
-    document.querySelector('.open-dialog').onclick = function () {
-      dialog.show()
-    }
+
+
+    /*
+        当点击pre 展示上一页面板 设置indicators
+        当点击next 展示下一页面板 设置indicators
+
+        当点击indicator 展示第n页 设置indicators
+    */
   </script>
 
 
